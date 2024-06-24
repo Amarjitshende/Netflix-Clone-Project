@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing history</title>
+    <link rel="stylesheet" href="billing.css">
+</head>
+
+<body>
+    <header>
+        <div class="heading">
+            <img src="netflixlogo.png" alt="">
+            <a href="/Accounts/Membership.html">
+                <h3>Back</h3>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <h1 style="text-align: left; width: 90vw; margin-top: 2rem;">Billing Details</h1>
+        <div class="plan">
+            <h3>your membership</h3>
+            <div class="membership">
+                <h3>Plan</h3>
+                <h4>Mobile</h4>
+                <h4>
+                    <script>document.write(localStorage.getItem('selectedPrice'));</script>/month
+                </h4>
+
+                <h3>Next billing date</h3>
+                <h4></span>
+                    <script>document.write(localStorage.getItem('billingDate'));</script>
+                </h4>
+            </div>
+        </div>
+        <h3 style="text-align: left; width: 90vw; margin-top: 2rem; color: rgb(103, 101, 101); text-transform: uppercase;">payment history</h3>
+        <div class="bill">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Service period</th>
+                        <th>Payment Id</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <script>document.write(localStorage.getItem('paymentDate'));</script>
+                        </td>
+                        <td>Streaming Service</td>
+                        <td>
+                            <script>document.write(localStorage.getItem('paymentDate'));</script> <span> To </span>
+                            <script>document.write(localStorage.getItem('expireDate'));</script>
+                        </td>
+                        <td>
+                            <script>document.write(localStorage.getItem('paymentId'));</script>
+                        </td>
+                        <td>
+                            <script>document.write(localStorage.getItem('selectedPrice'));</script>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+    <!-- footer section start -->
+
+    <footer>
+        <h3>Questions? <a href="#">Contact us</a></h3>
+
+        <div class="footer-div">
+            <ul>
+                <li><a href="#">Investor Relation</a></li>
+                <li><a href="#">Media Center</a></li>
+                <li><a href="#">Jobs</a></li>
+                <li><a href="#">Coockie Preferences</a></li>
+                <li><a href="#">Term of Use</a></li>
+                <li><a href="#">Privacy Statement</a></li>
+                <li><a href="#">Audio and Subtitles</a></li>
+                <li><a href="#">Help Centre</a></li>
+                <li><a href="#">Gift Cards</a></li>
+            </ul>
+        </div>
+        <div class="code">
+            <a href="#">Service code</a>
+        </div>
+
+    </footer>
+
+    <!-- footer section end -->
+</body>
+
+<script>
+    const date = localStorage.getItem('expireDate');
+    const billingDate = date + 1;
+
+</script>
+
+</html>
