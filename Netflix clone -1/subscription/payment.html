@@ -131,68 +131,87 @@
 
     <script src="plan.js"></script>
 
-    <!-- Your script for Razorpay -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById("rzp-button1").onclick = function (e) {
-                e.preventDefault(); // Prevent default action if it's a form submit button
+   <!-- Your script for Razorpay -->
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById("rzp-button1").onclick = function (e) {
+            e.preventDefault(); // Prevent default action if it's a form submit button
 
-                // Retrieve the selected price from local storage
-                let price = localStorage.getItem('selectedPrice');
+            // Retrieve the selected price from local storage
+            let price = localStorage.getItem('selectedPrice');
 
-                // Validate the price
-                if (!price || isNaN(price)) {
-                    alert("Please select a plan before proceeding.");
-                    return; // Exit if the price is invalid
-                }
+            // Validate the price
+            if (!price || isNaN(price)) {
+                alert("Please select a plan before proceeding.");
+                return; // Exit if the price is invalid
+            }
 
-                // Convert the price to paise
-                let amountInPaise = parseFloat(price) * 100;
+            // Convert the price to paise
+            let amountInPaise = parseFloat(price) * 100;
 
-                // Razorpay options
-                var options = {
-                    key: "rzp_test_PV1oQ0oMtgXOsq", // Enter the Key ID generated from the Dashboard
-                    amount: amountInPaise, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                    currency: "INR",
-                    name: "Membership",
-                    description: "This is your membership",
-                    image: "https://www.mintformations.co.uk/blog/wp-content/uploads/2020/05/shutterstock_583717939.jpg",
-                    theme: {
-                        color: "#000",
-                    },
-                    handler: function (response) {
-                        // Handle successful payment here
-                        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
-                        // You can also send the payment ID to your server for further processing
-                        window.location.href = 'index.html'
-                    },
-                    prefill: {
-                        name: "John Doe", // Pre-fill customer name (you can replace with actual user data)
-                        email: "john.doe@example.com", // Pre-fill customer email
-                        contact: "9999999999" // Pre-fill customer contact
-                    },
-                    notes: {
-                        address: "Razorpay Corporate Office" // Add any custom notes here
-                    },
-                    modal: {
-                        ondismiss: function () {
-                            // Handle the case when the payment popup is closed
-                            console.log("Payment popup closed");
-                        }
+            // Razorpay options
+            var options = {
+                key: "rzp_test_PV1oQ0oMtgXOsq", // Enter the Key ID generated from the Dashboard
+                amount: amountInPaise, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                currency: "INR",
+                name: "Membership",
+                description: "This is your membership",
+                image: "https://www.mintformations.co.uk/blog/wp-content/uploads/2020/05/shutterstock_583717939.jpg",
+                theme: {
+                    color: "#000",
+                },
+                handler: function (response) {
+                    // Handle successful payment here
+                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+
+                    // Get current date
+                    let paymentDate = new Date();
+
+                    // Calculate expiration date (28 days from payment date)
+                    let expireDate = new Date(paymentDate);
+                    expireDate.setDate(paymentDate.getDate() + 28);
+                    let billingDate = new Date(paymentDate);
+                    billingDate.setDate(paymentDate.getDate() + 29);
+
+                    // Format dates to YYYY-MM-DD
+                    let paymentDateFormatted = paymentDate.toISOString().split('T')[0];
+                    let expireDateFormatted = expireDate.toISOString().split('T')[0];
+                    let billingDateFormatted = billingDate.toISOString().split('T')[0];
+
+                    // You can also send the payment ID to your server for further processing
+                    localStorage.setItem('paymentId', `${response.razorpay_payment_id}`);
+                    localStorage.setItem('paymentDate', paymentDateFormatted);
+                    localStorage.setItem('expireDate', expireDateFormatted);
+                    localStorage.setItem('billingDate', billingDateFormatted);
+                    window.location.href = 'index.html'
+                },
+                prefill: {
+                    name: "John Doe", // Pre-fill customer name (you can replace with actual user data)
+                    email: "john.doe@example.com", // Pre-fill customer email
+                    contact: "9999999999" // Pre-fill customer contact
+                },
+                notes: {
+                    address: "Razorpay Corporate Office" // Add any custom notes here
+                },
+                modal: {
+                    ondismiss: function () {
+                        // Handle the case when the payment popup is closed
+                        console.log("Payment popup closed");
                     }
-                };
-
-                // Create and open the Razorpay payment form
-                var rzpy = new Razorpay(options);
-                rzpy.open();
-
-                // Handle payment form closure and payment failure
-                rzpy.on('payment.failed', function (response) {
-                    alert(`Payment failed! Error: ${response.error.description}`);
-                });
+                }
             };
-        });
-    </script>
+
+            // Create and open the Razorpay payment form
+            var rzpy = new Razorpay(options);
+            rzpy.open();
+
+            // Handle payment form closure and payment failure
+            rzpy.on('payment.failed', function (response) {
+                alert(`Payment failed! Error: ${response.error.description}`);
+            });
+        };
+    });
+</script>
 </body>
 
 </html>
